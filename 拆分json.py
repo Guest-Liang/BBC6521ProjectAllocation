@@ -31,5 +31,13 @@ def split_json_by_custom_ranges(input_file, output_dir, id_ranges):
             print(f"Saved {len(records)} records to {output_file}")
 
 # 使用示例
-custom_ranges = [(1, 69462), (69463, 265590), (265591, 461718), (461719,657846),(657847,853974),(853975,1050102)] 
-split_json_by_custom_ranges('../QMULProjectRecord_bak/1028_zip.json', './jsondata', custom_ranges)
+custom_ranges = [
+    (1, 69462), 
+    (69463, 265590), 
+    (265591, 461718), 
+    (461719, 657846),
+    (657847, 853974),
+    (853975, 1050102),
+    (1050103, 1246230)
+] 
+split_json_by_custom_ranges('../QMULProjectRecord_bak/1029_zip.json', './jsondata', custom_ranges)
