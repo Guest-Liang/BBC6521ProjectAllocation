@@ -13,12 +13,12 @@ let cachedData: AllocationRecord[] | null = null
 const loadAllData = async (): Promise<AllocationRecord[]> => {
   if (!cachedData) {
     const filePaths = [
-      '/data_1_69462_flat.json',
-      '/data_69463_265590_flat.json',
-      '/data_265591_461718_flat.json',
-      '/data_461719_657846_flat.json',
-      '/data_657847_853974_flat.json',
-      '/data_853975_1050102_flat.json'
+      '/BBC6521ProjectAllocation/data_1_69462_flat.json',
+      '/BBC6521ProjectAllocation/data_69463_265590_flat.json',
+      '/BBC6521ProjectAllocation/data_265591_461718_flat.json',
+      '/BBC6521ProjectAllocation/data_461719_657846_flat.json',
+      '/BBC6521ProjectAllocation/data_657847_853974_flat.json',
+      '/BBC6521ProjectAllocation/data_853975_1050102_flat.json'
     ]
     const dataPromises = filePaths.map(async (path) => {
       const response = await fetch(path)
