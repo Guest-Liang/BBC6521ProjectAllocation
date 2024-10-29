@@ -1,0 +1,16 @@
+# all node_modules
+**/node_modules
+
+# mysql infomation
+config
+
+# log
+**/*.log
+
+# raw html and excel file
+html存档
+
+# backend
+
+# frontend
+pjallcate_frontend/.vscode/settings.json
