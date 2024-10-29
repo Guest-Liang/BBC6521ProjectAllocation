@@ -35,5 +35,5 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4  # 使用最新版本的 actions-gh-pages
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./pjallcated_frontend/dist  # 确保指向正确的构建输出目录
+          publish_dir: ./pjallcate_frontend/dist  # 确保指向正确的构建输出目录
           publish_branch: gh-pages
