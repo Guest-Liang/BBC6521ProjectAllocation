@@ -59,7 +59,6 @@ const fetchChartData = async () => {
 
   try {
     const data = await api.fetchAllocationData()
-    console.log(data)
 
     chartOption.value.xAxis.data = data.map((item: { datetime: any }) =>
       cmImports.formatDateToLocal(item.datetime),

@@ -12,8 +12,21 @@ const BASE_URL = 'http://localhost:3000'
 let cachedData: AllocationRecord[] | null = null
 const loadAllData = async (): Promise<AllocationRecord[]> => {
   if (!cachedData) {
-    const alloDataJSON = await import('../../../public/1028_zip.json')
-    cachedData = alloDataJSON.default as AllocationRecord[]
+    const filePaths = [
+      '/data_1_69462_flat.json',
+      '/data_69463_265590_flat.json',
+      '/data_265591_461718_flat.json',
+      '/data_461719_657846_flat.json',
+      '/data_657847_853974_flat.json',
+      '/data_853975_1050102_flat.json'
+    ]
+    const dataPromises = filePaths.map(async (path) => {
+      const response = await fetch(path)
+      if (!response.ok) throw new Error(`Failed to fetch ${path}`)
+      return response.json() as Promise<AllocationRecord[]>
+    })
+    const allData = await Promise.all(dataPromises)
+    cachedData = allData.flat()
   }
   return cachedData
 }
@@ -91,7 +104,7 @@ export const getProjectAllocation = async ( projectIds: string[], ): Promise<any
   if (isUsingJSON) {
     console.log('Using JSON source')
     const result: { [key: string]: { datetime: string; allocated_to: string | null }[] } = {}
-    const batchSize = 60000
+    const batchSize = 5000
     const AllData = await loadAllData()
 
     for (let i = 0; i < AllData.length; i += batchSize) {
@@ -199,7 +212,7 @@ export const getStudentAllocation = async (studentIds: string[], ): Promise<any>
   if (isUsingJSON) {
     console.log('Using JSON source')
     const result: {}[] = []
-    const batchSize = 50000
+    const batchSize = 2000
     const AllData = await loadAllData()
     
     for (let i = 0; i < AllData.length; i += batchSize) {

@@ -180,11 +180,11 @@ const fetchChangeStuData = async () => {
     await new Promise(resolve => setTimeout(resolve, 1000))
 
     const studentIds = await apiService.getStudentList()
-    loading.setText('Fetching Allocation Data')
+    loading.setText('Fetching Allocation Data, it may takes a while')
     await new Promise(resolve => setTimeout(resolve, 200))
 
     const studentAllocationData = await apiService.getStudentAllocation(studentIds)
-    loading.setText('Checking Students Changes')
+    loading.setText('Checking Students Changes, it may takes a while')
     await new Promise(resolve => setTimeout(resolve, 500))
 
     changedStudents = await apiService.checkStudentChanges(

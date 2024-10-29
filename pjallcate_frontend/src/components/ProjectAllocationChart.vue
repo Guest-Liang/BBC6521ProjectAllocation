@@ -179,11 +179,11 @@ const fetchChangePJData = async () => {
     await new Promise(resolve => setTimeout(resolve, 1000))
 
     const projectIds = await apiService.getProjectList()
-    loading.setText('Fetching Allocation Data')
+    loading.setText('Fetching Allocation Data, Please Wait')
     await new Promise(resolve => setTimeout(resolve, 200))
 
     const allocationData = await apiService.getProjectAllocation(projectIds)
-    loading.setText('Checking Projects Changes')
+    loading.setText('Checking Projects Changes, it may takes a while')
     await new Promise(resolve => setTimeout(resolve, 500))
 
     changedProjects = await apiService.checkProjectChanges(allocationData)
