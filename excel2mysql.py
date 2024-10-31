@@ -20,7 +20,7 @@ except mysql.connector.Error as err:
 
 cursor = conn.cursor()
 
-date_part = '20241030'
+date_part = '20241031'
 
 df = pd.read_excel(f'{date_part}.xlsx', sheet_name=None)
 

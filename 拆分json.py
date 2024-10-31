@@ -39,6 +39,7 @@ custom_ranges = [
     (657847, 853974),
     (853975, 1050102),
     (1050103, 1246230),
-    (1246231, 1442358)
+    (1246231, 1442358),
+    (1442359, 1638486)
 ] 
-split_json_by_custom_ranges('../QMULProjectRecord_bak/1030_zip.json', './jsondata', custom_ranges)
+split_json_by_custom_ranges('../QMULProjectRecord_bak/1031_zip.json', './jsondata', custom_ranges)
