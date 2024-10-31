@@ -19,7 +19,8 @@ const loadAllData = async (): Promise<AllocationRecord[]> => {
       '/BBC6521ProjectAllocation/data_461719_657846_flat.json',
       '/BBC6521ProjectAllocation/data_657847_853974_flat.json',
       '/BBC6521ProjectAllocation/data_853975_1050102_flat.json',
-      '/BBC6521ProjectAllocation/data_1050103_1246230_flat.json'
+      '/BBC6521ProjectAllocation/data_1050103_1246230_flat.json',
+      '/BBC6521ProjectAllocation/',
     ]
     const dataPromises = filePaths.map(async (path) => {
       const response = await fetch(path)
