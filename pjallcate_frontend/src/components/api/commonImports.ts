@@ -93,7 +93,10 @@ export const commonchangedStudent = [
 export const commonChartOptions = {
   title: {
     left: 'center',
-    top: '2%',
+    top: '0.5%',
+    textStyle: {
+      fontSize: 15,
+    },
   },
   tooltip: {
     trigger: 'axis',
@@ -106,12 +109,12 @@ export const commonChartOptions = {
     },
   },
   legend: {
-    top: '7%',
+    top: '5%',
   },
   xAxis: {
     type: 'category',
     data: [],
-    name: 'Time',
+    name: '',
     nameLocation: 'middle',
     nameGap: 35,
   },
@@ -119,14 +122,14 @@ export const commonChartOptions = {
     type: 'value',
     name: 'Number of Projects',
     nameLocation: 'middle',
-    nameGap: 50,
+    nameGap: 35,
   },
   dataZoom: [
     {
       type: 'slider',
       start: 0,
       end: 100,
-      height: 40,
+      height: 30,
       bottom: '5%',
     },
     {
@@ -136,10 +139,10 @@ export const commonChartOptions = {
     },
   ],
   grid: {
-    left: '4%',
+    left: '3%',
     right: '5%',
-    bottom: '16%',
-    top: '14%',
+    bottom: '14%',
+    top: '12%',
     containLabel: true,
   },
 }

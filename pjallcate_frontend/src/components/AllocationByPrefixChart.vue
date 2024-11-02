@@ -11,7 +11,6 @@ import * as api from './api/apiService'
 
 import { ref, onMounted } from 'vue'
 import VChart from 'vue-echarts'
-import axios from 'axios'
 import { ElLoading, ElMessageBox } from 'element-plus'
 
 let isChartVisible = ref(false)
@@ -73,11 +72,6 @@ const fetchPrefixData = async () => {
   })
 
   try {
-    // const response = await axios.get(
-    //   'http://localhost:3000/api/allocation-by-prefix',
-    // )
-
-    // const data = response.data
     const data = await api.fetchAllocationDataByPrefix()
 
     chartOption.value.xAxis.data = Array.from(

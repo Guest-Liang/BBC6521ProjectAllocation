@@ -15,9 +15,8 @@
           :value="project?.project_id"
         />
       </el-select>
-      <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-      <el-button type="primary" @click="fetchPJAlloData">查看所选项目分配信息</el-button>
-      <el-button type="primary" @click="fetchChangePJData">查看有变化的项目信息</el-button>
+      <el-button class="custom-button" type="primary" @click="fetchPJAlloData">查看所选项目分配信息</el-button>
+      <el-button class="custom-button" type="primary" @click="fetchChangePJData">查看有变化的项目信息</el-button>
     </div>
     <el-table
       :data="tableData"
@@ -224,9 +223,10 @@ onMounted(() => {
 }
 
 .custom-select {
-  width: 520px;
-  max-height: 32px;
+  width: 40vw;
+  max-height: 4vw;
   overflow-y: auto;
+  margin-right: 10px;
 }
 
 .row-color-1 {
@@ -239,5 +239,11 @@ onMounted(() => {
 
 .row-default {
   background-color: #ffffff !important;
+}
+
+.custom-button {
+  height: 30px;
+  padding: 0px 5px;
+  font-size: 14px;
 }
 </style>
