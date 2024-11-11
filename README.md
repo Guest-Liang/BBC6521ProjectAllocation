@@ -6,3 +6,6 @@
 
 ## GitHub Pages
 https://guest-liang.github.io/BBC6521ProjectAllocation/ 
+
+## Wakatime
+[![wakatime](https://wakatime.com/badge/user/0985cb7f-21b8-4ea5-86a4-5e6ba93cb575/project/11373b25-c641-444b-bb94-8214eb67ae40.svg)](https://wakatime.com/badge/user/0985cb7f-21b8-4ea5-86a4-5e6ba93cb575/project/11373b25-c641-444b-bb94-8214eb67ae40)
