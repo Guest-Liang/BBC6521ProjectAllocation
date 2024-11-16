@@ -40,7 +40,7 @@
 
 <script setup lang="ts">
 import * as cmImports from './api/commonImports'
-cmImports.commonImports() // 通用函数等都在此
+cmImports.commonImports()
 import * as apiService from './api/apiService'
 
 import { ref } from 'vue'
