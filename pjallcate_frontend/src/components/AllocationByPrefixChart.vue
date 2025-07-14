@@ -13,7 +13,7 @@ import { ref, onMounted } from 'vue'
 import VChart from 'vue-echarts'
 import { ElLoading, ElMessageBox } from 'element-plus'
 
-let isChartVisible = ref(false)
+const isChartVisible = ref(false)
 const chartOption = ref(
   Object.assign({}, cmImports.commonChartOptions, {
     title: Object.assign({}, cmImports.commonChartOptions.title, {
@@ -25,7 +25,7 @@ const chartOption = ref(
     series: [
       {
         name: 'BUPT 已分配',
-        data: [],
+        data: [] as number[],
         type: 'line',
         smooth: true,
         lineStyle: {
@@ -34,7 +34,7 @@ const chartOption = ref(
       },
       {
         name: 'BUPT 未分配',
-        data: [],
+        data: [] as number[],
         type: 'line',
         smooth: true,
         lineStyle: {
@@ -43,7 +43,7 @@ const chartOption = ref(
       },
       {
         name: 'QMUL 已分配',
-        data: [],
+        data: [] as number[],
         type: 'line',
         smooth: true,
         lineStyle: {
@@ -52,7 +52,7 @@ const chartOption = ref(
       },
       {
         name: 'QMUL 未分配',
-        data: [],
+        data: [] as number[],
         type: 'line',
         smooth: true,
         lineStyle: {
@@ -74,25 +74,14 @@ const fetchPrefixData = async () => {
   try {
     const data = await api.fetchAllocationDataByPrefix()
 
-    chartOption.value.xAxis.data = Array.from(
-      new Set(
-        data.map((item: { datetime: any }) =>
-          cmImports.formatDateToLocal(item.datetime),
-        ),
-      ),
-    )
-    chartOption.value.series[0].data = data
-      .filter((item: any) => item.project_prefix === 'BUPT')
-      .map((item: any) => item.allocated_count)
-    chartOption.value.series[1].data = data
-      .filter((item: any) => item.project_prefix === 'BUPT')
-      .map((item: any) => item.unallocated_count)
-    chartOption.value.series[2].data = data
-      .filter((item: any) => item.project_prefix === 'QMUL')
-      .map((item: any) => item.allocated_count)
-    chartOption.value.series[3].data = data
-      .filter((item: any) => item.project_prefix === 'QMUL')
-      .map((item: any) => item.unallocated_count)
+    const buptSeries = cmImports.fillTimeSeriesByPrefix(data, 'BUPT')
+    const qmulSeries = cmImports.fillTimeSeriesByPrefix(data, 'QMUL')
+    chartOption.value.xAxis.data = buptSeries.x // 时间轴一致
+
+    chartOption.value.series[0].data = buptSeries.allocated
+    chartOption.value.series[1].data = buptSeries.unallocated
+    chartOption.value.series[2].data = qmulSeries.allocated
+    chartOption.value.series[3].data = qmulSeries.unallocated
     isChartVisible.value = true
   } catch (error) {
     ElMessageBox.alert(

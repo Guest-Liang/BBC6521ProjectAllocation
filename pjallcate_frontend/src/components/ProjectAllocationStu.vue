@@ -9,7 +9,7 @@
         @keypress.enter="fetchStudentData"
       ></el-input>
       <el-button class='cust-button' type="primary" @click="fetchStudentData">查看学号分配信息</el-button>
-      <el-button class='cust-button' type="primary" @click="fetchChangeStuData">查看有变化的学号信息</el-button>
+      <el-button class='cust-button' type="primary" @click="fetchChangeStuData_v2">查看有变化的学号信息</el-button>
     </div>
     <el-table
       :data="tableData"
@@ -46,7 +46,7 @@ import * as apiService from './api/apiService'
 import { ref } from 'vue'
 import { ElLoading, ElMessageBox } from 'element-plus'
 
-let studentId = ref<string>('')
+const studentId = ref<string>('')
 const tableData = ref<
   Array<{ student_id: string; datetime: string; project_id: string }>
 >([])
@@ -66,6 +66,7 @@ const rowClassName = ({ row }: { row: { student_id: string } }) => {
   return colorMap.get(row.student_id) || 'row-default'
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let loading: any = null
 
 const showLoading = (text = 'Loading...') => {
@@ -138,11 +139,13 @@ const fetchStudentData = async () => {
     studentIdArray.forEach(student_id => {
       const studentData = data
         .sort(
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           (a: any, b: any) =>
             new Date(a.datetime).getTime() - new Date(b.datetime).getTime(),
         )
 
       let lastProjectId: string | null = null
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       studentData.forEach((item: any) => {
         if (item.allocated_to === student_id) {
           if (item.project_id !== lastProjectId) {
@@ -152,7 +155,7 @@ const fetchStudentData = async () => {
               project_id: item.project_id,
             })
             lastProjectId = item.project_id
-          }          
+          }
         }
       })
     })
@@ -172,7 +175,8 @@ const fetchStudentData = async () => {
   }
 }
 
-const fetchChangeStuData = async () => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const fetchChangeStuData_v1 = async () => {
   showLoading('Fetching Data')
   let changedStudents: string[] = []
   try {
@@ -205,6 +209,12 @@ const fetchChangeStuData = async () => {
     studentId.value = changedStudents.join(',')
     fetchStudentData()
   }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const fetchChangeStuData_v2 = () => {
+  studentId.value='2021212562,2021212657,2021212694,2021212748,2021212832,2021212892,2021212964,2021212966,2021212973,2021213130,2021213155,2021213195,2021213201'
+  fetchStudentData()
 }
 </script>
 

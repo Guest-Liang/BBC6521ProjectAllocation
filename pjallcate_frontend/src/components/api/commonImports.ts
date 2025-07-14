@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { use } from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
 import { LineChart } from 'echarts/charts'
@@ -54,8 +55,137 @@ export function formatDatefrom8num(datetimeStr: string) {
   return isoString;
 }
 
+export function normalizeTo5Min(time: dayjs.Dayjs) {
+  const minutes = Math.floor(time.minute() / 5) * 5
+  return time.minute(minutes).second(0).millisecond(0)
+}
+
 // delay function in ms
 export const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+
+// V2 api needs filling to show normally.
+export function fillData_AllocationCount(
+  rawData: {
+    datetime: string
+    allocated_count: number
+    unallocated_count: number
+  }[],
+  endTimeStr = '2024-11-01T08:50:10Z', // UTC+0 结束时间
+  intervalMinutes = 5,
+) {
+  if (rawData.length === 0) return []
+
+  const parsedData = rawData.map(item => {
+    const time = normalizeTo5Min(dayjs(item.datetime))
+    return {
+      ...item,
+      normTime: time.format('YYYY-MM-DD HH:mm'),
+      datetimeObj: time,
+    }
+  })
+
+  // 去重，仅保留每个时间点的最后一条记录
+  const uniqueMap = new Map()
+  for (const item of parsedData) {
+    uniqueMap.set(item.normTime, item)
+  }
+
+  const normalizedData = Array.from(uniqueMap.values()).sort((a, b) =>
+    a.datetimeObj.isBefore(b.datetimeObj) ? -1 : 1,
+  )
+
+  const result = []
+  let i = 0
+  let lastKnown = normalizedData[0]
+  const start = normalizedData[0].datetimeObj
+  const end = normalizeTo5Min(dayjs(endTimeStr)) // 结束点向下取整为5分钟
+
+  for (
+    let time = start.clone();
+    time.isBefore(end) || time.isSame(end);
+    time = time.add(intervalMinutes, 'minute')
+  ) {
+    const timeKey = time.format('YYYY-MM-DD HH:mm')
+
+    if (i < normalizedData.length && normalizedData[i].normTime === timeKey) {
+      lastKnown = normalizedData[i]
+      result.push({
+        datetime: time.toISOString(),
+        allocated_count: lastKnown.allocated_count,
+        unallocated_count: lastKnown.unallocated_count,
+      })
+      i++
+    } else {
+      result.push({
+        datetime: time.toISOString(),
+        allocated_count: lastKnown.allocated_count,
+        unallocated_count: lastKnown.unallocated_count,
+      })
+    }
+  }
+
+  return result
+}
+
+export function fillTimeSeriesByPrefix(
+  rawData: {
+    datetime: string
+    project_prefix: string
+    allocated_count: number
+    unallocated_count: number
+  }[],
+  prefix: string,
+  endTimeStr = '2024-11-01T08:50:10Z',
+) {
+  const filtered = rawData
+    .filter(item => item.project_prefix === prefix)
+    .map(item => {
+      const dt = normalizeTo5Min(dayjs(item.datetime))
+      return {
+        datetime: dt.toISOString(),
+        normKey: dt.format('YYYY-MM-DD HH:mm'),
+        allocated_count: item.allocated_count,
+        unallocated_count: item.unallocated_count,
+      }
+    })
+
+  const map = new Map()
+  for (const row of filtered) {
+    map.set(row.normKey, row)
+  }
+
+  const sortedKeys = Array.from(map.keys()).sort()
+  if (sortedKeys.length === 0) return { allocated: [], unallocated: [], x: [] }
+
+  const start = normalizeTo5Min(dayjs(sortedKeys[0]))
+  const end = normalizeTo5Min(dayjs(endTimeStr))
+
+  const filled = []
+  let last = map.get(sortedKeys[0])
+
+  for (
+    let t = start.clone();
+    t.isBefore(end) || t.isSame(end);
+    t = t.add(5, 'minute')
+  ) {
+    const key = t.format('YYYY-MM-DD HH:mm')
+    const point = map.get(key)
+    if (point) last = point
+
+    filled.push({
+      datetime: t.toISOString(),
+      allocated_count: last?.allocated_count ?? 0,
+      unallocated_count: last?.unallocated_count ?? 0,
+    })
+  }
+
+  return {
+    x: filled.map(p => formatDateToLocal(p.datetime)),
+    allocated: filled.map(p => p.allocated_count),
+    unallocated: filled.map(p => p.unallocated_count),
+  }
+}
+
 
 // Deprecated, do not use!
 export const commonchangedProject = [
@@ -113,7 +243,7 @@ export const commonChartOptions = {
   },
   xAxis: {
     type: 'category',
-    data: [],
+    data: [] as string[],
     name: '',
     nameLocation: 'middle',
     nameGap: 35,

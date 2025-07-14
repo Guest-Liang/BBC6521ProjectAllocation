@@ -17,7 +17,7 @@ import { ref, onMounted } from 'vue'
 import VChart from 'vue-echarts'
 import { ElLoading, ElMessageBox } from 'element-plus'
 
-let isChartVisible = ref(false)
+const isChartVisible = ref(false)
 const chartOption = ref(
   Object.assign({}, cmImports.commonChartOptions, {
     title: Object.assign({}, cmImports.commonChartOptions.title, {
@@ -29,7 +29,7 @@ const chartOption = ref(
     series: [
       {
         name: '已分配 Allocated',
-        data: [],
+        data: [] as number[],
         type: 'line',
         smooth: true,
         lineStyle: {
@@ -38,7 +38,7 @@ const chartOption = ref(
       },
       {
         name: '未分配 Unallocated',
-        data: [],
+        data: [] as number[],
         type: 'line',
         smooth: true,
         lineStyle: {
@@ -59,14 +59,18 @@ const fetchChartData = async () => {
 
   try {
     const data = await api.fetchAllocationData()
+    const filledData = cmImports.fillData_AllocationCount(data)
 
-    chartOption.value.xAxis.data = data.map((item: { datetime: any }) =>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    chartOption.value.xAxis.data = filledData.map((item: { datetime: any }) =>
       cmImports.formatDateToLocal(item.datetime),
     )
-    chartOption.value.series[0].data = data.map(
+    chartOption.value.series[0].data = filledData.map(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (item: { allocated_count: any }) => item.allocated_count,
     )
-    chartOption.value.series[1].data = data.map(
+    chartOption.value.series[1].data = filledData.map(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (item: { unallocated_count: any }) => item.unallocated_count,
     )
     isChartVisible.value = true

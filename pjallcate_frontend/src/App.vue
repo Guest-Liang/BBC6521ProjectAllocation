@@ -21,7 +21,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import AllocationCountChart from './components/AllocationCountChart.vue'
 import AllocationByPrefixChart from './components/AllocationByPrefixChart.vue'
 import ProjectAllocationChart from './components/ProjectAllocationChart.vue'

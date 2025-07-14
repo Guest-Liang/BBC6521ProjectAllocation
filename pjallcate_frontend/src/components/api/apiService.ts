@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-empty-object-type */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from 'axios'
 import { delay } from './commonImports'
 import * as cmImports from './commonImports'
@@ -8,9 +10,10 @@ interface AllocationRecord {
   p: string; // project_id 简化为 p
   i: number; // id 简化为 i
 }
-const BASE_URL = 'http://localhost:3000'
+const BASE_URL = 'https://api-bbc6521-24-25.guestliang.icu'
 let cachedData: AllocationRecord[] | null = null
 const loadAllData = async (): Promise<AllocationRecord[]> => {
+  console.log(`[apiService] If you are reading this in console, then it still use json data!`)
   if (!cachedData) {
     const filePaths = [
       '/BBC6521ProjectAllocation/data_1_69462_flat.json',
@@ -35,7 +38,7 @@ const loadAllData = async (): Promise<AllocationRecord[]> => {
   return cachedData
 }
 
-export const isUsingJSON = true
+export const isUsingJSON = false
 
 // 获取当前时间，格式化字符串
 const getCurrentTimestamp = () => new Date().toLocaleString()
@@ -47,7 +50,7 @@ export const fetchAllocationData = async (): Promise<any> => {
     console.log('Using JSON source')
     const AllData = await loadAllData()
     const result: { [key: string]: { datetime: string; allocated_count: number; unallocated_count: number } } = {}
-    AllData.forEach((record: AllocationRecord) => { 
+    AllData.forEach((record: AllocationRecord) => {
       if (!result[record.d]) {
         result[record.d] = {
           datetime: cmImports.formatDatefrom8num(record.d),
@@ -66,7 +69,7 @@ export const fetchAllocationData = async (): Promise<any> => {
   } else {
     console.log('Using API source')
     try {
-      const response = await axios.get(`${BASE_URL}/api/allocation-count`)
+      const response = await axios.get(`${BASE_URL}/api/v2/allocation-count`)
       console.log(`[${getCurrentTimestamp()}] Successfully fetched allocation data.`)
       return response.data
     } catch (error) {
@@ -90,7 +93,7 @@ export const getProjectList = async (): Promise<string[]> => {
   } else {
     console.log('Using API source')
     try {
-      const response = await axios.get(`${BASE_URL}/api/projects`)
+      const response = await axios.get(`${BASE_URL}/api/v2/projects`)
       console.log(`[${getCurrentTimestamp()}] Successfully fetched project list.`)
       return response.data.map((project: any) => project.project_id)
     } catch (error) {
@@ -113,7 +116,7 @@ export const getProjectAllocation = async ( projectIds: string[], ): Promise<any
 
     for (let i = 0; i < AllData.length; i += batchSize) {
       const batch = AllData.slice(i, i + batchSize)
-  
+
       batch.forEach((record: AllocationRecord) => {
         if (projectIds.includes(record.p)) {
           if (!result[record.p]) {
@@ -125,7 +128,7 @@ export const getProjectAllocation = async ( projectIds: string[], ): Promise<any
           })
         }
       })
-  
+
       await delay(1)
     }
     console.log(`[${getCurrentTimestamp()}] Successfully fetched allocation data.`)
@@ -133,7 +136,7 @@ export const getProjectAllocation = async ( projectIds: string[], ): Promise<any
   } else {
     console.log('Using API source')
     try {
-      const response = await axios.get(`${BASE_URL}/api/project-allocation`, {
+      const response = await axios.get(`${BASE_URL}/api/v2/project-allocation`, {
         params: { project_ids: projectIds.join(',') },
       })
       console.log(`[${getCurrentTimestamp()}] Successfully fetched allocation data.`,)
@@ -197,7 +200,7 @@ export const getStudentList = async (): Promise<string[]> => {
   } else {
     console.log('Using API source')
     try {
-      const response = await axios.get(`${BASE_URL}/api/students-list`)
+      const response = await axios.get(`${BASE_URL}/api/v2/students-list`)
       console.log(`[${getCurrentTimestamp()}] Successfully fetched student list.`)
       return response.data
     } catch (error) {
@@ -205,7 +208,7 @@ export const getStudentList = async (): Promise<string[]> => {
         `[${getCurrentTimestamp()}] Error fetching student list: ${error}`,
       )
       return []
-    }    
+    }
   }
 
 }
@@ -218,7 +221,7 @@ export const getStudentAllocation = async (studentIds: string[], ): Promise<any>
     const result: {}[] = []
     const batchSize = 2000
     const AllData = await loadAllData()
-    
+
     for (let i = 0; i < AllData.length; i += batchSize) {
       const batch = AllData.slice(i, i + batchSize)
       batch.forEach((record: AllocationRecord) => {
@@ -237,7 +240,7 @@ export const getStudentAllocation = async (studentIds: string[], ): Promise<any>
   } else {
     console.log('Using API source')
     try {
-      const response = await axios.get(`${BASE_URL}/api/students`, {
+      const response = await axios.get(`${BASE_URL}/api/v2/students`, {
         params: { student_ids: studentIds.join(',') },
       })
       console.log(
@@ -249,7 +252,7 @@ export const getStudentAllocation = async (studentIds: string[], ): Promise<any>
         `[${getCurrentTimestamp()}] Error fetching student allocation data: ${error}`,
       )
       return {}
-    }    
+    }
   }
 }
 
@@ -302,11 +305,11 @@ export const checkStudentChanges = async (
 // 以Q\B前缀区分分配数
 export const fetchAllocationDataByPrefix = async (): Promise<any> => {
   console.log(`[${getCurrentTimestamp()}] Fetching allocation data by prefix...`)
-  
+
   if (isUsingJSON) {
     console.log('Using JSON source')
     const AllData = await loadAllData()
-    const result: { 
+    const result: {
       datetime: string
       project_prefix: string
       allocated_count: string
@@ -315,7 +318,7 @@ export const fetchAllocationDataByPrefix = async (): Promise<any> => {
 
     const tempMap: { [key: string]: { datetime: string; project_prefix: string; allocated_count: number; unallocated_count: number } } = {}
 
-    AllData.forEach((record: AllocationRecord) => { 
+    AllData.forEach((record: AllocationRecord) => {
       const prefix = record.p.startsWith('Q') ? 'QMUL' : record.p.startsWith('B') ? 'BUPT' : 'Other'
       const key = `${record.d}_${prefix}`
 
@@ -346,11 +349,11 @@ export const fetchAllocationDataByPrefix = async (): Promise<any> => {
 
     console.log(`[${getCurrentTimestamp()}] Successfully fetched allocation data.`)
     return result.sort((a, b) => new Date(a.datetime).getTime() - new Date(b.datetime).getTime())
-  
+
   } else {
     console.log('Using API source')
     try {
-      const response = await axios.get(`${BASE_URL}/api/allocation-by-prefix`)
+      const response = await axios.get(`${BASE_URL}/api/v2/allocation-by-prefix`)
       console.log(`[${getCurrentTimestamp()}] Successfully fetched allocation data.`)
       return response.data
     } catch (error) {

@@ -34,8 +34,142 @@ db.connect(err => {
     console.log('Connected to MySQL')
 })
 
-// 分配计数api
-app.get('/api/allocation-count', (req, res) => {
+
+// 分配计数api v2
+app.get('/api/v2/allocation-count', (req, res) => {
+    let query = config.database.api.allocation_count_v2
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error executing query:', err)
+            res.status(500).send('Error fetching data')
+            return
+        }
+        const formatted = results.map(row => ({
+            datetime: new Date(row.datetime + 'Z').toISOString(), // 强制当作 UTC
+            allocated_count: row.allocated_count,
+            unallocated_count: row.unallocated_count
+        }))
+        res.json(formatted)
+
+    })
+})
+
+// 分配计数api，细分BUPT和QMUL v2
+app.get('/api/v2/allocation-by-prefix', (req, res) => {
+    let query = config.database.api.allocation_by_prefix_v2
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error executing query:', err)
+            res.status(500).send('Error fetching data')
+            return
+        }
+        res.json(results)
+    })
+})
+
+// 通过project_id查询分配信息api，并返回时间序列数据 v2
+app.get('/api/v2/project-allocation', (req, res) => {
+  const { project_ids } = req.query
+  if (!project_ids) {
+    return res.status(400).send('Project IDs are required')
+  }
+
+  const projectIdArray = project_ids.split(',')
+  const placeholders = projectIdArray.map(() => '?').join(',')
+
+  // 这里替换 SQL 中占位符
+  let query = config.database.api.project_allocation_v2.replace('(?)', `(${placeholders})`)
+
+  db.query(query, projectIdArray, (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err)
+      res.status(500).send('Error fetching data')
+      return
+    }
+
+    // 直接按项目分组返回时间序列数据即可
+    const groupedResults = projectIdArray.reduce((acc, projectId) => {
+      acc[projectId] = results
+        .filter(row => row.project_id === projectId)
+        .map(row => ({
+          datetime: row.datetime,
+          allocated_to: row.allocated_to
+        }))
+      return acc
+    }, {})
+
+    res.json(groupedResults)
+  })
+})
+
+// 通过student_id查询分配信息 v2
+app.get('/api/v2/students', (req, res) => {
+    const { student_ids } = req.query
+    if (!student_ids) {
+        return res.status(400).send('Student IDs are required')
+    }
+
+    const studentIdArray = student_ids.split(',')
+    if (studentIdArray.length === 0) {
+        return res.status(400).send('At least one Student ID is required')
+    }
+
+    let placeholders = studentIdArray.map(() => '?').join(',')
+    let query = config.database.api.student_allocation_v2.replace('(?)', `(${placeholders})`)
+
+    db.query(query, studentIdArray, (err, results) => {
+        if (err) {
+            console.error('Error executing query:', err)
+            res.status(500).send('Error fetching data')
+            return
+        }
+
+        const timeSeriesData = results.map(row => ({
+            project_id: row.project_id,
+            datetime: row.datetime,
+            allocated_to: row.allocated_to
+        }))
+
+        res.json(timeSeriesData)
+    })
+})
+
+// 获取最后681条数据中的allocated_to学号 v2
+app.get('/api/v2/students-list', (req, res) => {
+    const query = config.database.api.students_list_v2
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error executing query:', err)
+            res.status(500).send('Error fetching data')
+            return
+        }
+
+        const studentIds = results.map(row => row.allocated_to).filter(id => id !== '0')
+        res.json(studentIds)
+    })
+})
+
+// 获取所有项目ID
+app.get('/api/v2/projects', (req, res) => {
+    let query = config.database.api.projects
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error executing query:', err)
+            res.status(500).send('Error fetching project data')
+            return
+        }
+        res.json(results)
+    })
+})
+
+
+
+// ---------------- V1 API Start ----------------------
+
+// 分配计数api v1
+app.get('/api/v1/allocation-count', (req, res) => {
     let query = config.database.api.allocation_count
     db.query(query, (err, results) => {
         if (err) {
@@ -47,8 +181,8 @@ app.get('/api/allocation-count', (req, res) => {
     })
 })
 
-// 分配计数api，细分BUPT和QMUL
-app.get('/api/allocation-by-prefix', (req, res) => {
+// 分配计数api，细分BUPT和QMUL v1
+app.get('/api/v1/allocation-by-prefix', (req, res) => {
     let query = config.database.api.allocation_by_prefix
     db.query(query, (err, results) => {
         if (err) {
@@ -60,8 +194,8 @@ app.get('/api/allocation-by-prefix', (req, res) => {
     })
 })
 
-// 通过project_id查询分配信息api，并返回时间序列数据
-app.get('/api/project-allocation', (req, res) => {
+// 通过project_id查询分配信息api，并返回时间序列数据 v1
+app.get('/api/v1/project-allocation', (req, res) => {
     const { project_ids } = req.query
     if (!project_ids) {
         return res.status(400).send('Project IDs are required')
@@ -70,7 +204,7 @@ app.get('/api/project-allocation', (req, res) => {
     const projectIdArray = project_ids.split(',')
     let placeholders = projectIdArray.map(() => '?').join(',')
 
-    let query = config.database.api.project_allocation.replace('(?)', `(${placeholders})`)
+    let query = config.database.api.project_allocation.replace('${ids}', placeholders)
 
     db.query(query, projectIdArray, (err, results) => {
         if (err) {
@@ -94,22 +228,8 @@ app.get('/api/project-allocation', (req, res) => {
     })
 })
 
-// 获取所有项目ID
-app.get('/api/projects', (req, res) => {
-    let query = config.database.api.projects
-
-    db.query(query, (err, results) => {
-        if (err) {
-            console.error('Error executing query:', err)
-            res.status(500).send('Error fetching project data')
-            return
-        }
-        res.json(results)
-    })
-})
-
-// 通过student_id查询分配信息
-app.get('/api/students', (req, res) => {
+// 通过student_id查询分配信息 v1
+app.get('/api/v1/students', (req, res) => {
     const { student_ids } = req.query
     if (!student_ids) {
         return res.status(400).send('Student IDs are required')
@@ -140,8 +260,8 @@ app.get('/api/students', (req, res) => {
     })
 })
 
-// 获取最后681条数据中的allocated_to学号
-app.get('/api/students-list', (req, res) => {
+// 获取最后681条数据中的allocated_to学号 v1
+app.get('/api/v1/students-list', (req, res) => {
     let totalQuery = config.database.api.students_list_total
     
     db.query(totalQuery, (err, result) => {
@@ -162,6 +282,22 @@ app.get('/api/students-list', (req, res) => {
         })
     })
 })
+
+// 获取所有项目ID
+app.get('/api/v1/projects', (req, res) => {
+    let query = config.database.api.projects
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error executing query:', err)
+            res.status(500).send('Error fetching project data')
+            return
+        }
+        res.json(results)
+    })
+})
+// ---------------- V1 API end ----------------------
+
 
 // 妙妙api
 app.get('/api/guestliang', (req, res) => {

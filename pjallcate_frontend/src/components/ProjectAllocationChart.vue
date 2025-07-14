@@ -1,3 +1,4 @@
+<!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <template>
   <div id="ProjectAllocationChart">
     <div style="display: flex; flex-direction: row; margin-top: 10px">
@@ -16,7 +17,7 @@
         />
       </el-select>
       <el-button class="custom-button" type="primary" @click="fetchPJAlloData">查看所选项目分配信息</el-button>
-      <el-button class="custom-button" type="primary" @click="fetchChangePJData">查看有变化的项目信息</el-button>
+      <el-button class="custom-button" type="primary" @click="fetchChangePJData_v2">查看有变化的项目信息</el-button>
     </div>
     <el-table
       :data="tableData"
@@ -50,6 +51,7 @@ import * as apiService from './api/apiService'
 import { ref, onMounted } from 'vue'
 import { ElLoading, ElMessage, ElMessageBox } from 'element-plus'
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const projectList = ref<any[]>([])
 const selectedProjectIds = ref<string[]>([])
 const tableData = ref<
@@ -70,6 +72,7 @@ const rowClassName = ({ row }: { row: { project_id: string } }) => {
   return colorMap.get(row.project_id) || 'row-default'
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let loading: any = null
 
 const showLoading = (text = 'Loading...') => {
@@ -96,8 +99,9 @@ const closeLoading = () => {
 // 获取所有项目列表
 const fetchProjectList = async () => {
   try {
-    let data = await apiService.getProjectList()
+    const data = await apiService.getProjectList()
     data.sort()
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     projectList.value = data.map((item: any) => {
       return {
         project_id: item,
@@ -137,11 +141,13 @@ const fetchPJAlloData = async () => {
     selectedProjectIds.value.forEach(projectId => {
       const projectData = data[projectId] || []
       projectData.sort(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (a: any, b: any) =>
           new Date(a.datetime).getTime() - new Date(b.datetime).getTime(),
       )
 
       let lastAllocatedTo: string | null = null
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       projectData.forEach((item: any) => {
         if (item.allocated_to !== lastAllocatedTo) {
           tableData.value.push({
@@ -170,7 +176,15 @@ const fetchPJAlloData = async () => {
   }
 }
 
-const fetchChangePJData = async () => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const fetchChangePJData_v2 = () => {
+  selectedProjectIds.value = ['BCHENLEI1','BXUFANGMIN2','QARW7','QASA5','QAW2','QCC5','QFL8','QGG5','QGG8','QHA2','QJZ9','QSP3','BGUOSHAOYONG2','BLUZHAOMING1','QMC3','QVW9','QMC4','QMC5','QMJ8','QMS1','QJL1','QSP4']
+  fetchPJAlloData()
+}
+
+// Aborted
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const fetchChangePJData_v1 = async () => {
   showLoading('Fetching Data')
   let changedProjects: string[] = []
   try {
