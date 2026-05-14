@@ -1,6 +1,6 @@
 <template>
-  <div id="AllocationByPrefixChart">
-    <VChart v-if="isChartVisible" :option="chartOption" />
+  <div id="AllocationByPrefixChart" class="analytics-panel chart-panel">
+    <VChart v-if="isChartVisible" class="chart-frame" :option="chartOption" />
   </div>
 </template>
 
@@ -31,6 +31,9 @@ const chartOption = ref(
         lineStyle: {
           width: 2,
         },
+        areaStyle: {
+          opacity: 0.05,
+        },
       },
       {
         name: 'BUPT 未分配',
@@ -39,6 +42,9 @@ const chartOption = ref(
         smooth: true,
         lineStyle: {
           width: 2,
+        },
+        areaStyle: {
+          opacity: 0.05,
         },
       },
       {
@@ -49,6 +55,9 @@ const chartOption = ref(
         lineStyle: {
           width: 2,
         },
+        areaStyle: {
+          opacity: 0.05,
+        },
       },
       {
         name: 'QMUL 未分配',
@@ -57,6 +66,9 @@ const chartOption = ref(
         smooth: true,
         lineStyle: {
           width: 2,
+        },
+        areaStyle: {
+          opacity: 0.05,
         },
       },
     ],
@@ -68,7 +80,7 @@ const fetchPrefixData = async () => {
     target: '#AllocationByPrefixChart',
     lock: true,
     text: 'Fetching Data',
-    background: 'rgba(0, 0, 0, 0.7)',
+    background: 'var(--loading-scrim)',
   })
 
   try {
@@ -108,14 +120,5 @@ onMounted(() => {
 <style scoped>
 #AllocationByPrefixChart {
   width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.v-chart {
-  width: 100%;
-  height: 100%;
 }
 </style>

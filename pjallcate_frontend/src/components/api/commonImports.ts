@@ -16,6 +16,49 @@ import timezone from 'dayjs/plugin/timezone'
 dayjs.extend(utc)
 dayjs.extend(timezone)
 
+const resolveThemeValue = (name: string, fallback: string) => {
+  if (typeof document === 'undefined') {
+    return fallback
+  }
+
+  const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim()
+  return value || fallback
+}
+
+const chartPalette = [
+  resolveThemeValue('--color-accent', '#c9822c'),
+  resolveThemeValue('--color-teal', '#68aaa0'),
+  resolveThemeValue('--color-blue', '#7899bd'),
+  resolveThemeValue('--color-danger', '#b35b4b'),
+]
+
+const ink = resolveThemeValue('--color-ink', '#241d13')
+const paper = resolveThemeValue('--color-paper-soft', '#fbf5e9')
+const inkMuted = resolveThemeValue('--color-ink-muted', '#6f604d')
+const navy = resolveThemeValue('--color-navy', '#13253a')
+const brownLine = resolveThemeValue('--color-brown-line', '#a99370')
+const handleBorder = resolveThemeValue('--color-handle-border', '#9d6829')
+const tableBorder = resolveThemeValue('--color-table-border', 'rgba(89, 70, 44, 0.14)')
+const accent = resolveThemeValue('--color-accent', '#c9822c')
+const voidSoft = resolveThemeValue('--color-void-soft', '#0d1a2c')
+const chartTooltipBorder = resolveThemeValue(
+  '--color-chart-tooltip-border',
+  'rgba(230, 173, 85, 0.32)',
+)
+const chartZoomBorder = resolveThemeValue('--color-chart-zoom-border', 'rgba(89, 70, 44, 0.18)')
+const chartZoomFiller = resolveThemeValue(
+  '--color-chart-zoom-filler',
+  'rgba(201, 130, 44, 0.18)',
+)
+const fontDisplay = resolveThemeValue(
+  '--font-display',
+  "Baskerville, Georgia, 'Songti SC', 'STSong', serif",
+)
+const fontBody = resolveThemeValue(
+  '--font-body',
+  "Aptos, 'Avenir Next', 'Microsoft YaHei UI', 'Noto Sans CJK SC', sans-serif",
+)
+
 export function commonImports() {
   use([
     CanvasRenderer,
@@ -221,25 +264,41 @@ export const commonchangedStudent = [
 ]
 
 export const commonChartOptions = {
+  backgroundColor: 'transparent',
+  color: chartPalette,
   title: {
     left: 'center',
-    top: '0.5%',
+    top: '2%',
     textStyle: {
-      fontSize: 15,
+      color: ink,
+      fontFamily: fontDisplay,
+      fontSize: 18,
+      fontWeight: 700,
     },
   },
   tooltip: {
     trigger: 'axis',
+    backgroundColor: voidSoft,
+    borderColor: chartTooltipBorder,
+    borderWidth: 1,
+    textStyle: {
+      color: paper,
+      fontFamily: fontBody,
+    },
     axisPointer: {
       type: 'cross',
       animation: false,
       label: {
-        backgroundColor: '#505765',
+        backgroundColor: navy,
       },
     },
   },
   legend: {
-    top: '5%',
+    top: '7%',
+    textStyle: {
+      color: inkMuted,
+      fontWeight: 600,
+    },
   },
   xAxis: {
     type: 'category',
@@ -247,12 +306,33 @@ export const commonChartOptions = {
     name: '',
     nameLocation: 'middle',
     nameGap: 35,
+    axisLine: {
+      lineStyle: {
+        color: brownLine,
+      },
+    },
+    axisLabel: {
+      color: inkMuted,
+      fontSize: 11,
+    },
   },
   yAxis: {
     type: 'value',
     name: 'Number of Projects',
     nameLocation: 'middle',
     nameGap: 35,
+    nameTextStyle: {
+      color: inkMuted,
+      fontWeight: 700,
+    },
+    splitLine: {
+      lineStyle: {
+        color: tableBorder,
+      },
+    },
+    axisLabel: {
+      color: inkMuted,
+    },
   },
   dataZoom: [
     {
@@ -261,6 +341,15 @@ export const commonChartOptions = {
       end: 100,
       height: 30,
       bottom: '5%',
+      borderColor: chartZoomBorder,
+      fillerColor: chartZoomFiller,
+      handleStyle: {
+        color: accent,
+        borderColor: handleBorder,
+      },
+      textStyle: {
+        color: inkMuted,
+      },
     },
     {
       type: 'inside',
@@ -269,10 +358,10 @@ export const commonChartOptions = {
     },
   ],
   grid: {
-    left: '3%',
+    left: '4%',
     right: '5%',
-    bottom: '14%',
-    top: '12%',
+    bottom: '15%',
+    top: '16%',
     containLabel: true,
   },
 }

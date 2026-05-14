@@ -1,19 +1,18 @@
 <template>
-  <div id="ProjectAllocationStu">
-    <div style="display: flex; flex-direction: row; margin-top: 10px">
+  <div id="ProjectAllocationStu" class="analytics-panel query-panel">
+    <div class="query-toolbar">
       <el-input
         class="custom-input"
         v-model="studentId"
         placeholder="请输入学号，多个以英文逗号,分开"
-        style="width: 500px"
         @keypress.enter="fetchStudentData"
       ></el-input>
-      <el-button class='cust-button' type="primary" @click="fetchStudentData">查看学号分配信息</el-button>
-      <el-button class='cust-button' type="primary" @click="fetchChangeStuData_v2">查看有变化的学号信息</el-button>
+      <el-button class="cust-button" type="primary" @click="fetchStudentData">查看学号分配信息</el-button>
+      <el-button class="cust-button" type="primary" @click="fetchChangeStuData_v2">查看有变化的学号信息</el-button>
     </div>
     <el-table
       :data="tableData"
-      style="width: 80%; margin-top: 0px"
+      class="table-frame"
       :row-class-name="rowClassName"
     >
       <el-table-column
@@ -75,7 +74,7 @@ const showLoading = (text = 'Loading...') => {
       target: '#ProjectAllocationStu',
       lock: true,
       text: text,
-      background: 'rgba(0, 0, 0, 0.7)',
+      background: 'var(--loading-scrim)',
     })
   } else {
     loading.setText(text)
@@ -218,37 +217,8 @@ const fetchChangeStuData_v2 = () => {
 }
 </script>
 
-<style>
+<style scoped>
 #ProjectAllocationStu {
   width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.el-table {
-  width: 80%;
-  margin-top: 20px;
-}
-
-.row-color-1 {
-  background-color: #f9f9f9 !important;
-}
-
-.row-color-2 {
-  background-color: #ecf6f8 !important;
-}
-
-.cust-button {
-  height: 30px;
-  padding: 0px 5px;
-  font-size: 14px;
-}
-
-.custom-input {
-  width: 40vw;
-  max-height: 3vw;
-  margin-right: 10px;
 }
 </style>

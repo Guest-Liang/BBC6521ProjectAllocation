@@ -1,7 +1,7 @@
 <template>
-  <div id="AllocationCountChart">
+  <div id="AllocationCountChart" class="analytics-panel chart-panel">
     <VChart
-      style="border-radius: 20px"
+      class="chart-frame"
       v-if="isChartVisible"
       :option="chartOption"
     />
@@ -35,6 +35,9 @@ const chartOption = ref(
         lineStyle: {
           width: 2,
         },
+        areaStyle: {
+          opacity: 0.08,
+        },
       },
       {
         name: '未分配 Unallocated',
@@ -43,6 +46,9 @@ const chartOption = ref(
         smooth: true,
         lineStyle: {
           width: 2,
+        },
+        areaStyle: {
+          opacity: 0.08,
         },
       },
     ],
@@ -54,7 +60,7 @@ const fetchChartData = async () => {
     target: '#AllocationCountChart',
     lock: true,
     text: 'Fetching Data',
-    background: 'rgba(0, 0, 0, 0.7)',
+    background: 'var(--loading-scrim)',
   })
 
   try {
@@ -99,14 +105,5 @@ onMounted(() => {
 <style scoped>
 #AllocationCountChart {
   width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.v-chart {
-  width: 100%;
-  height: 100%;
 }
 </style>

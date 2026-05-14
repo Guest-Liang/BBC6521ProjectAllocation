@@ -1,7 +1,7 @@
 <!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <template>
-  <div id="ProjectAllocationChart">
-    <div style="display: flex; flex-direction: row; margin-top: 10px">
+  <div id="ProjectAllocationChart" class="analytics-panel query-panel">
+    <div class="query-toolbar">
       <el-select
         v-model="selectedProjectIds"
         multiple
@@ -21,7 +21,7 @@
     </div>
     <el-table
       :data="tableData"
-      style="width: 80%; margin-top: 0px"
+      class="table-frame"
       :row-class-name="rowClassName"
     >
       <el-table-column
@@ -78,11 +78,11 @@ let loading: any = null
 const showLoading = (text = 'Loading...') => {
   if (!loading) {
     loading = ElLoading.service({
-      target: '#ProjectAllocationChart',
-      lock: true,
-      text: text,
-      background: 'rgba(0, 0, 0, 0.7)',
-    })
+    target: '#ProjectAllocationChart',
+    lock: true,
+    text: text,
+    background: 'var(--loading-scrim)',
+  })
   } else {
     loading.setText(text)
   }
@@ -225,39 +225,5 @@ onMounted(() => {
 <style scoped>
 #ProjectAllocationChart {
   width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.el-table {
-  width: 80%;
-  margin-top: 20px;
-}
-
-.custom-select {
-  width: 40vw;
-  max-height: 4vw;
-  overflow-y: auto;
-  margin-right: 10px;
-}
-
-.row-color-1 {
-  background-color: #f9f9f9 !important;
-}
-
-.row-color-2 {
-  background-color: #ecf6f8 !important;
-}
-
-.row-default {
-  background-color: #ffffff !important;
-}
-
-.custom-button {
-  height: 30px;
-  padding: 0px 5px;
-  font-size: 14px;
 }
 </style>

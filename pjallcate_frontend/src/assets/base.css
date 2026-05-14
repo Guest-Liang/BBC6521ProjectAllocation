@@ -1,53 +1,123 @@
-/* color palette from <https://github.com/vuejs/theme> */
 :root {
-  --vt-c-white: #ffffff;
-  --vt-c-white-soft: #f8f8f8;
-  --vt-c-white-mute: #f2f2f2;
+  --color-void: #07111f;
+  --color-void-soft: #0d1a2c;
+  --color-navy: #13253a;
+  --color-navy-soft: #1b344f;
+  --color-paper: #f6ecd9;
+  --color-paper-soft: #fbf5e9;
+  --color-paper-muted: #eadbc0;
+  --color-ink: #241d13;
+  --color-ink-muted: #6f604d;
+  --color-rule: rgba(89, 70, 44, 0.18);
+  --color-rule-strong: rgba(89, 70, 44, 0.32);
+  --color-accent: #c9822c;
+  --color-accent-strong: #e6ad55;
+  --color-accent-deep: #b56f22;
+  --color-accent-soft: rgba(201, 130, 44, 0.14);
+  --color-teal: #68aaa0;
+  --color-teal-soft: rgba(104, 170, 160, 0.16);
+  --color-blue: #7899bd;
+  --color-blue-soft: rgba(120, 153, 189, 0.16);
+  --color-blue-deep: #1d324c;
+  --color-danger: #b35b4b;
+  --color-brown-line: #a99370;
+  --color-handle-border: #9d6829;
+  --color-success: #6f9466;
+  --color-shell-control: rgba(251, 245, 233, 0.08);
+  --color-shell-control-hover: rgba(251, 245, 233, 0.16);
+  --color-field: rgba(255, 250, 239, 0.76);
+  --color-field-hover: rgba(255, 250, 239, 0.94);
+  --color-table-row-a: rgba(255, 250, 239, 0.74);
+  --color-table-row-b: rgba(238, 226, 204, 0.74);
+  --color-table-row-default: rgba(251, 245, 233, 0.68);
+  --color-control-border: rgba(135, 91, 36, 0.24);
+  --color-control-border-hover: rgba(230, 173, 85, 0.58);
+  --color-table-border: rgba(89, 70, 44, 0.14);
+  --color-table-cell-border: rgba(89, 70, 44, 0.12);
+  --color-table-header: rgba(23, 42, 63, 0.95);
+  --color-field-shadow: rgba(55, 43, 24, 0.08);
+  --color-field-shadow-strong: rgba(55, 43, 24, 0.12);
+  --color-grid-line: rgba(255, 255, 255, 0.035);
+  --color-grid-mask: rgba(0, 0, 0, 0.85);
+  --color-orbit-line: rgba(230, 173, 85, 0.28);
+  --color-orbit-glow: rgba(230, 173, 85, 0.06);
+  --color-orbit-glow-alt: rgba(104, 170, 160, 0.05);
+  --color-nav-border: rgba(255, 255, 255, 0.08);
+  --color-glass-border: rgba(255, 255, 255, 0.08);
+  --color-nav-control-border: rgba(251, 245, 233, 0.14);
+  --color-nav-shadow: rgba(0, 0, 0, 0.18);
+  --color-accent-shadow: rgba(126, 75, 25, 0.18);
+  --color-accent-shadow-strong: rgba(126, 75, 25, 0.24);
+  --color-hero-panel: rgba(19, 37, 58, 0.92);
+  --color-hero-panel-deep: rgba(7, 17, 31, 0.82);
+  --color-hero-accent: rgba(201, 130, 44, 0.18);
+  --color-shell-spotlight: rgba(201, 130, 44, 0.22);
+  --color-shell-spotlight-alt: rgba(104, 170, 160, 0.18);
+  --color-shell-panel: rgba(7, 17, 31, 0.58);
+  --color-paper-overlay: rgba(246, 236, 217, 0.98);
+  --color-paper-overlay-deep: rgba(228, 211, 181, 0.94);
+  --color-content-overlay: rgba(246, 236, 217, 0.96);
+  --color-content-overlay-deep: rgba(227, 211, 184, 0.92);
+  --color-hero-text-muted: rgba(251, 245, 233, 0.72);
+  --color-card-gradient-top: rgba(255, 250, 239, 0.82);
+  --color-card-gradient-bottom: rgba(235, 219, 190, 0.72);
+  --color-table-hover-bg: rgba(201, 130, 44, 0.14);
+  --color-chart-tooltip-border: rgba(230, 173, 85, 0.32);
+  --color-chart-zoom-border: rgba(89, 70, 44, 0.18);
+  --color-chart-zoom-filler: rgba(201, 130, 44, 0.18);
+  --loading-scrim: rgba(7, 17, 31, 0.78);
 
-  --vt-c-black: #181818;
-  --vt-c-black-soft: #222222;
-  --vt-c-black-mute: #282828;
+  --font-display: Baskerville, Georgia, 'Songti SC', 'STSong', serif;
+  --font-body: Aptos, 'Avenir Next', 'Microsoft YaHei UI', 'Noto Sans CJK SC', sans-serif;
+  --font-mono: 'Cascadia Mono', 'IBM Plex Mono', 'SFMono-Regular', monospace;
 
-  --vt-c-indigo: #2c3e50;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-md: 1.125rem;
+  --text-lg: clamp(1.35rem, 2vw, 1.9rem);
+  --text-xl: clamp(2.2rem, 5vw, 4.6rem);
 
-  --vt-c-divider-light-1: rgba(60, 60, 60, 0.29);
-  --vt-c-divider-light-2: rgba(60, 60, 60, 0.12);
-  --vt-c-divider-dark-1: rgba(84, 84, 84, 0.65);
-  --vt-c-divider-dark-2: rgba(84, 84, 84, 0.48);
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
 
-  --vt-c-text-light-1: var(--vt-c-indigo);
-  --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
-  --vt-c-text-dark-1: var(--vt-c-white);
-  --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
-}
+  --radius-sm: 0.5rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.75rem;
+  --radius-round: 999px;
 
-/* semantic color variables for this project */
-:root {
-  --color-background: var(--vt-c-white);
-  --color-background-soft: var(--vt-c-white-soft);
-  --color-background-mute: var(--vt-c-white-mute);
+  --border-hairline: 1px;
+  --layout-max: 92rem;
+  --control-height: 2.75rem;
+  --hero-min-height: 18rem;
+  --panel-min-height: 30rem;
+  --chart-panel-height: clamp(32rem, 68vh, 48rem);
+  --query-panel-height: 34rem;
 
-  --color-border: var(--vt-c-divider-light-2);
-  --color-border-hover: var(--vt-c-divider-light-1);
+  --shadow-soft: 0 1.25rem 3.75rem rgba(0, 0, 0, 0.22);
+  --shadow-card: 0 1rem 2.75rem rgba(20, 28, 38, 0.16);
+  --shadow-inset: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  --duration-fast: 160ms;
+  --duration-med: 260ms;
+  --ease-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
 
-  --color-heading: var(--vt-c-text-light-1);
-  --color-text: var(--vt-c-text-light-1);
-
-  --section-gap: 160px;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-background: var(--vt-c-black);
-    --color-background-soft: var(--vt-c-black-soft);
-    --color-background-mute: var(--vt-c-black-mute);
-
-    --color-border: var(--vt-c-divider-dark-2);
-    --color-border-hover: var(--vt-c-divider-dark-1);
-
-    --color-heading: var(--vt-c-text-dark-1);
-    --color-text: var(--vt-c-text-dark-2);
-  }
+  --color-background: var(--color-void);
+  --color-background-soft: var(--color-void-soft);
+  --color-surface: var(--color-paper);
+  --color-surface-soft: var(--color-paper-soft);
+  --color-border: var(--color-rule);
+  --color-border-hover: var(--color-rule-strong);
+  --color-heading: var(--color-paper-soft);
+  --color-text: rgba(251, 245, 233, 0.82);
 }
 
 *,
@@ -58,29 +128,26 @@
   font-weight: normal;
 }
 
+html {
+  min-width: 20rem;
+  background: var(--color-background);
+}
+
 body {
   min-height: 100vh;
   color: var(--color-text);
   background: var(--color-background);
-  transition:
-    color 0.5s,
-    background-color 0.5s;
   line-height: 1.6;
-  font-family:
-    Inter,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    Oxygen,
-    Ubuntu,
-    Cantarell,
-    'Fira Sans',
-    'Droid Sans',
-    'Helvetica Neue',
-    sans-serif;
+  font-family: var(--font-body);
   font-size: 15px;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
 }
