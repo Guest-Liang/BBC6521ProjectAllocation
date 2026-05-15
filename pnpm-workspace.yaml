@@ -1,3 +1,6 @@
 packages:
   - 'pjallcate_frontend'
   - 'pjallcate_backend'
+allowBuilds:
+  esbuild: true
+  vue-demi: true

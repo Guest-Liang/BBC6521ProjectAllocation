@@ -12,12 +12,12 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4  # 使用最新版本的 checkout
+        uses: actions/checkout@v6  # 使用最新版本的 checkout
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4  # 使用最新版本的 setup-node
+        uses: actions/setup-node@v6  # 使用最新版本的 setup-node
         with:
-          node-version: 'lts/*'  # 使用 Node.js 的最新 LTS 版本
+          node-version: 'latest'  # 使用 Node.js 的latest版本
 
       - name: List directory for debugging
         run: ls -a
